@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 
+import moment from 'moment';
+
 import Stepper from 'material-ui/Stepper/Stepper';
 import Step from 'material-ui/Stepper/Step';
 import StepLabel from 'material-ui/Stepper/StepLabel';
@@ -24,8 +26,8 @@ export class UserForm extends Component {
         step: 1,
         //Variables for page 1 Personal details
         name: "",
-        gender: "",
-        dateOfBirth: "",
+        gender: "Female",
+        dateOfBirth: moment('01-01-2021', 'DD-MM-YYYY'),
         id: "",
         institutionName: "",
         admissionNumber: "",
@@ -183,8 +185,16 @@ export class UserForm extends Component {
         }
     };
 
-    handleChange = (input) => (e) => {
-        this.setState({ [input]: e.target.value });
+    handleChange = (input, e) => {
+        console.log(input);
+        let inputValue = '';
+        console.log(e);
+        if(e.target.value){
+            inputValue = e.target.value;
+        }else if(e.target.innerText){
+            inputValue = e.target.innerText;
+        }
+        this.setState({ [input]: inputValue });
     };
 
 
@@ -439,7 +449,7 @@ export class UserForm extends Component {
                             <FormPersonalDetails
                                 nextStep={() => this.nextStep()}
                                 previousStep={() => this.previousStep()}
-                                handleChange={() => this.handleChange()}
+                                handleChange={(input, e) =>this.handleChange(input, e)}
                                 values={values}
                                 stepLabel={stepLabel}
                             />
