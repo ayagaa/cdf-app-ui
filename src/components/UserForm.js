@@ -189,13 +189,111 @@ export class UserForm extends Component {
         console.log(input);
         let inputValue = '';
         console.log(e);
-        if(e.target.value){
+        if (e.target.value) {
             inputValue = e.target.value;
-        }else if(e.target.innerText){
+        } else if (e.target.innerText) {
             inputValue = e.target.innerText;
         }
         this.setState({ [input]: inputValue });
     };
+
+    getPage = (step, values, stepLabel) => {
+        switch (step) {
+            case 1:
+                return (
+                    <FormPersonalDetails
+                        nextStep={() => this.nextStep()}
+                        previousStep={() => this.previousStep()}
+                        handleChange={(input, e) => this.handleChange(input, e)}
+                        values={values}
+                        stepLabel={stepLabel}
+                    />
+                );
+            case 2:
+                return (
+                    <FormGuardianDetails
+                        nextStep={() => this.nextStep()}
+                        previousStep={() => this.previousStep()}
+                        handleChange={() => this.handleChange()}
+                        values={values}
+                        stepLabel={stepLabel}
+                    />
+                );
+            case 3:
+                return (
+                    <FormSiblingDetails
+                        nextStep={() => this.nextStep()}
+                        previousStep={() => this.previousStep()}
+                        handleChange={() => this.handleChange()}
+                        values={values}
+                        stepLabel={stepLabel}
+                    />
+                );
+            case 4:
+                return (
+                    <FormAdditionalDetails
+                        nextStep={() => this.nextStep()}
+                        previousStep={() => this.previousStep()}
+                        handleChange={() => this.handleChange()}
+                        values={values}
+                        stepLabel={stepLabel}
+                    />
+
+                );
+            case 5:
+                return (
+                    <FormEducationFundingHistory
+                        nextStep={() => this.nextStep()}
+                        previousStep={() => this.previousStep()}
+                        handleChange={() => this.handleChange()}
+                        values={values}
+                        stepLabel={stepLabel}
+                    />
+                );
+            case 6:
+                return (
+                    <FormAcademicPerformance
+                        nextStep={() => this.nextStep()}
+                        previousStep={() => this.previousStep()}
+                        handleChange={() => this.handleChange()}
+                        values={values}
+                        stepLabel={stepLabel}
+                    />
+                );
+            case 7:
+                return (
+                    <FormRefereesDetails
+                        nextStep={() => this.nextStep()}
+                        previousStep={() => this.previousStep()}
+                        handleChange={() => this.handleChange()}
+                        values={values}
+                        stepLabel={stepLabel}
+                    />
+                );
+            case 8:
+                return (
+                    <FormAttachments
+                        nextStep={() => this.nextStep()}
+                        previousStep={() => this.previousStep()}
+                        handleChange={() => this.handleChange()}
+                        values={values}
+                        stepLabel={stepLabel}
+                    />
+
+                );
+            case 9:
+                return (
+                    <FormDeclaration
+                        nextStep={() => this.nextStep()}
+                        previousStep={() => this.previousStep()}
+                        handleChange={() => this.handleChange()}
+                        values={values}
+                        stepLabel={stepLabel}
+                    />
+
+                );
+        }
+    }
 
 
     render() {
@@ -431,272 +529,30 @@ export class UserForm extends Component {
         };
 
         let stepLabel = this.getStepContent(step);
+        const currentPage = this.getPage(step, values, stepLabel);
 
-        switch (step) {
-            case 1:
-                return (
-                    <div>
-                        <MuiThemeProvider>
-                            <Stepper activeStep={step - 1}>
-                                {steps.map((label, index) => {
-                                    return (
-                                        <Step key={label}>
-                                            <StepLabel>{label}</StepLabel>
-                                        </Step>
-                                    );
-                                })}
-                            </Stepper>
-                            <FormPersonalDetails
-                                nextStep={() => this.nextStep()}
-                                previousStep={() => this.previousStep()}
-                                handleChange={(input, e) =>this.handleChange(input, e)}
-                                values={values}
-                                stepLabel={stepLabel}
-                            />
-                        </MuiThemeProvider>
-
+        return (
+            <div>
+                <MuiThemeProvider>
+                    <div className="form-steps">
+                        <Stepper activeStep={step - 1}>
+                            {steps.map((label, index) => {
+                                return (
+                                    <Step key={label}>
+                                        <StepLabel>{label}</StepLabel>
+                                    </Step>
+                                );
+                            })}
+                        </Stepper>
                     </div>
-                );
-            // case 2:
-            //     return (
-            //         <div>
-            //             <MuiThemeProvider>
-            //                 <Stepper activeStep={step - 1}>
-            //                     {steps.map((label, index) => {
-            //                         return (
-            //                             <Step key={label}>
-            //                                 <StepLabel>{label}</StepLabel>
-            //                             </Step>
-            //                         );
-            //                     })}
-            //                 </Stepper>
-            //                 <FormPollingStationDetails
-            //                     nextStep={() => this.nextStep()}
-            //                     previousStep={() => this.previousStep()}
-            //                     handleChange={() => this.handleChange()}
-            //                     values={values}
-            //                 />
-            //             </MuiThemeProvider>
-            //         </div>
-            //     );
-            case 2:
-                return (
-                    <div>
-                        <MuiThemeProvider>
-                            <Stepper activeStep={step - 1}>
-                                {steps.map((label, index) => {
-                                    return (
-                                        <Step key={label}>
-                                            <StepLabel>{label}</StepLabel>
-                                        </Step>
-                                    );
-                                })}
-                            </Stepper>
-                            <FormGuardianDetails
-                                nextStep={() => this.nextStep()}
-                                previousStep={() => this.previousStep()}
-                                handleChange={() => this.handleChange()}
-                                values={values}
-                                stepLabel={stepLabel}
-                            />
-                        </MuiThemeProvider>
-                    </div>
-                );
-            case 3:
-                return (
-                    <div>
-                        <MuiThemeProvider>
-                            <Stepper activeStep={step - 1}>
-                                {steps.map((label, index) => {
-                                    return (
-                                        <Step key={label}>
-                                            <StepLabel>{label}</StepLabel>
-                                        </Step>
-                                    );
-                                })}
-                            </Stepper>
-                            <FormSiblingDetails
-                                nextStep={() => this.nextStep()}
-                                previousStep={() => this.previousStep()}
-                                handleChange={() => this.handleChange()}
-                                values={values}
-                                stepLabel={stepLabel}
-                            />
-                        </MuiThemeProvider>
-                    </div>
-                );
-            case 4:
-                return (
-                    <div>
-                        <MuiThemeProvider>
-                            <Stepper activeStep={step - 1}>
-                                {steps.map((label, index) => {
-                                    return (
-                                        <Step key={label}>
-                                            <StepLabel>{label}</StepLabel>
-                                        </Step>
-                                    );
-                                })}
-                            </Stepper>
-                            <FormAdditionalDetails
-                                nextStep={() => this.nextStep()}
-                                previousStep={() => this.previousStep()}
-                                handleChange={() => this.handleChange()}
-                                values={values}
-                                stepLabel={stepLabel}
-                            />
-                        </MuiThemeProvider>
+                    <br></br>
+                    <div className="form-body">
+                        {currentPage}
                     </div>
 
-                );
-            case 5:
-                return (
-                    <div>
-                        <MuiThemeProvider>
-                            <Stepper activeStep={step - 1}>
-                                {steps.map((label, index) => {
-                                    return (
-                                        <Step key={label}>
-                                            <StepLabel>{label}</StepLabel>
-                                        </Step>
-                                    );
-                                })}
-                            </Stepper>
-                            <FormEducationFundingHistory
-                                nextStep={() => this.nextStep()}
-                                previousStep={() => this.previousStep()}
-                                handleChange={() => this.handleChange()}
-                                values={values}
-                                stepLabel={stepLabel}
-                            />
-                        </MuiThemeProvider>
-                    </div>
-                );
-            case 6:
-                return (
-                    <div>
-                        <MuiThemeProvider>
-                            <Stepper activeStep={step - 1}>
-                                {steps.map((label, index) => {
-                                    return (
-                                        <Step key={label}>
-                                            <StepLabel>{label}</StepLabel>
-                                        </Step>
-                                    );
-                                })}
-                            </Stepper>
-                            <FormAcademicPerformance
-                                nextStep={() => this.nextStep()}
-                                previousStep={() => this.previousStep()}
-                                handleChange={() => this.handleChange()}
-                                values={values}
-                                stepLabel={stepLabel}
-                            />
-                        </MuiThemeProvider>
-                    </div>
-                );
-            case 7:
-                return (
-                    <div>
-                        <MuiThemeProvider>
-                            <Stepper activeStep={step - 1}>
-                                {steps.map((label, index) => {
-                                    return (
-                                        <Step key={label}>
-                                            <StepLabel>{label}</StepLabel>
-                                        </Step>
-                                    );
-                                })}
-                            </Stepper>
-                            <FormRefereesDetails
-                                nextStep={() => this.nextStep()}
-                                previousStep={() => this.previousStep()}
-                                handleChange={() => this.handleChange()}
-                                values={values}
-                                stepLabel={stepLabel}
-                            />
-                        </MuiThemeProvider>
-                    </div>
-                );
-            case 8:
-                return (
-                    <div>
-                        <MuiThemeProvider>
-                            <Stepper activeStep={step - 1}>
-                                {steps.map((label, index) => {
-                                    return (
-                                        <Step key={label}>
-                                            <StepLabel>{label}</StepLabel>
-                                        </Step>
-                                    );
-                                })}
-                            </Stepper>
-                            <FormAttachments
-                                nextStep={() => this.nextStep()}
-                                previousStep={() => this.previousStep()}
-                                handleChange={() => this.handleChange()}
-                                values={values}
-                                stepLabel={stepLabel}
-                            />
-                        </MuiThemeProvider>
-                    </div>
-
-                );
-            // case 9:
-            //     return (
-            //         <div>
-            //             <MuiThemeProvider>
-            //                 <Stepper activeStep={step - 1}>
-            //                     {steps.map((label, index) => {
-            //                         return (
-            //                             <Step key={label}>
-            //                                 <StepLabel>{label}</StepLabel>
-            //                             </Step>
-            //                         );
-            //                     })}
-            //                 </Stepper>
-            //                 <FormVerifierDetails
-            //                     nextStep={() => this.nextStep()}
-            //                     previousStep={() => this.previousStep()}
-            //                     handleChange={() => this.handleChange()}
-            //                     values={values}
-            //                     stepLabel={stepLabel}
-            //                 />
-            //             </MuiThemeProvider>
-
-            //         </div>
-
-            //     );
-            case 9:
-                return (
-                    <div>
-                        <MuiThemeProvider>
-                            <Stepper activeStep={step - 1}>
-                                {steps.map((label, index) => {
-                                    return (
-                                        <Step key={label}>
-                                            <StepLabel>{label}</StepLabel>
-                                        </Step>
-                                    );
-                                })}
-                            </Stepper>
-                            <FormDeclaration
-                                nextStep={() => this.nextStep()}
-                                previousStep={() => this.previousStep()}
-                                handleChange={() => this.handleChange()}
-                                values={values}
-                                stepLabel={stepLabel}
-                            />
-                        </MuiThemeProvider>
-                    </div>
-
-                );
-            // default:
-            //     console.log(step);
-            //     return (
-            //         <h1>Error</h1>
-            //     )
-        }
+                </MuiThemeProvider>
+            </div>
+        );
     }
 }
 
