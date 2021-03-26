@@ -534,7 +534,9 @@ export class UserForm extends Component {
         return (
             <div>
                 <MuiThemeProvider>
-                    <div className="form-steps">
+                    <div className="form-steps-small">
+                        </div>
+                    <div className="form-steps-large">
                         <Stepper activeStep={step - 1}>
                             {steps.map((label, index) => {
                                 return (
