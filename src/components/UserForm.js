@@ -27,7 +27,7 @@ export class UserForm extends Component {
         //Variables for page 1 Personal details
         name: "",
         gender: "Female",
-        dateOfBirth: moment('01-01-2021', 'DD-MM-YYYY'),
+        dateOfBirth: null,
         id: "",
         institutionName: "",
         admissionNumber: "",
@@ -188,11 +188,16 @@ export class UserForm extends Component {
     handleChange = (input, e) => {
         console.log(input);
         let inputValue = '';
-        console.log(e);
-        if (e.target.value) {
+        //console.log(e);
+        if(input === 'dateOfBirth' && moment(e).isValid()){
+            console.log(e);
+            inputValue = e;
+        }
+        else if (e.target.value) {
             inputValue = e.target.value;
         } else if (e.target.innerText) {
             inputValue = e.target.innerText;
+            console.log(e.target.innerText);
         }
         this.setState({ [input]: inputValue });
     };
@@ -547,7 +552,7 @@ export class UserForm extends Component {
                             })}
                         </Stepper>
                     </div>
-                    <br></br>
+                    {/* <br></br> */}
                     <div className="form-body">
                         {currentPage}
                     </div>
