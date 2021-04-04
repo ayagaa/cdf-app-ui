@@ -1,0 +1,7 @@
+.cdf-image{
+    width: 200px;
+    height: 200px;
+    background: url('CDF-Logo.jpg');
+    background-repeat: no-repeat;
+    background-size: 200px 200px;
+}

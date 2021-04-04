@@ -1,10 +1,17 @@
 import React, { Component } from "react";
 
+import './styles/UserForm.css';
+
 import moment from 'moment';
 
-import Stepper from 'material-ui/Stepper/Stepper';
-import Step from 'material-ui/Stepper/Step';
-import StepLabel from 'material-ui/Stepper/StepLabel';
+// import Stepper from 'material-ui/Stepper/Stepper';
+// import Step from 'material-ui/Stepper/Step';
+// import StepLabel from 'material-ui/Stepper/StepLabel';
+// import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 
@@ -26,9 +33,9 @@ export class UserForm extends Component {
         step: 1,
         //Variables for page 1 Personal details
         name: "",
-        gender: "Female",
+        gender: "",
         dateOfBirth: null,
-        id: "",
+        idNo: "",
         institutionName: "",
         admissionNumber: "",
         institutionBranch: "",
@@ -50,26 +57,28 @@ export class UserForm extends Component {
         amountApplied: "",
         //Variables for page 2 Parent /guardian
         familyStatus: "",
+        otherFamilyStatus: "",
         numberOfSiblings: 0,
         estimateFamilyIncome: 0,
         estimateFamilyExpenses: 0,
+        livingParent: "",
         fatherName: "",
         fatherAddress: "",
         fatherTelephone: "",
         fatherOccupation: "",
-        fatherEmploment: "",
+        fatherEmployment: "",
         fatherMainIncomeSource: "",
         motherName: "",
         motherAddress: "",
         motherTelephone: "",
         motherOccupation: "",
-        motherEmploment: "",
+        motherEmployment: "",
         motherMainIncomeSource: "",
         guardianName: "",
         guardianAddress: "",
         guardianTelephone: "",
         guardianOccupation: "",
-        guardianEmploment: "",
+        guardianEmployment: "",
         guardianMainIncomeSource: "",
         //Variables for page 3 Siblings list
         siblingsList: [],
@@ -151,7 +160,7 @@ export class UserForm extends Component {
             case 2:
                 return 'Enter you parent/ guardian details';
             case 3:
-                return 'Enter information on your siblings';
+                return 'Enter information on your siblings in school/ college / university this year';
             case 4:
                 return 'Enter other required information';
             case 5:
@@ -187,19 +196,28 @@ export class UserForm extends Component {
 
     handleChange = (input, e) => {
         console.log(input);
+        console.log(e);
         let inputValue = '';
         //console.log(e);
-        if(input === 'dateOfBirth' && moment(e).isValid()){
+        if(input === 'siblingsList' && e && e.id){
+            let {siblingsList} = this.state;
+            siblingsList.push(e);
+            this.setState({
+                siblingsList: siblingsList
+            });
+        }
+        else if (input === 'dateOfBirth' && moment(e).isValid()) {
             console.log(e);
             inputValue = e;
+            this.setState({ [input]: inputValue });
         }
-        else if (e.target.value) {
+        else if (e && e.target && e.target.value) {
             inputValue = e.target.value;
-        } else if (e.target.innerText) {
+        } else if (e && e.target && e.target.innerText) {
             inputValue = e.target.innerText;
             console.log(e.target.innerText);
+            this.setState({ [input]: inputValue });
         }
-        this.setState({ [input]: inputValue });
     };
 
     getPage = (step, values, stepLabel) => {
@@ -219,7 +237,7 @@ export class UserForm extends Component {
                     <FormGuardianDetails
                         nextStep={() => this.nextStep()}
                         previousStep={() => this.previousStep()}
-                        handleChange={() => this.handleChange()}
+                        handleChange={(input, e) => this.handleChange(input, e)}
                         values={values}
                         stepLabel={stepLabel}
                     />
@@ -229,7 +247,7 @@ export class UserForm extends Component {
                     <FormSiblingDetails
                         nextStep={() => this.nextStep()}
                         previousStep={() => this.previousStep()}
-                        handleChange={() => this.handleChange()}
+                        handleChange={(input, e) => this.handleChange(input, e)}
                         values={values}
                         stepLabel={stepLabel}
                     />
@@ -239,7 +257,7 @@ export class UserForm extends Component {
                     <FormAdditionalDetails
                         nextStep={() => this.nextStep()}
                         previousStep={() => this.previousStep()}
-                        handleChange={() => this.handleChange()}
+                        handleChange={(input, e) => this.handleChange(input, e)}
                         values={values}
                         stepLabel={stepLabel}
                     />
@@ -250,7 +268,7 @@ export class UserForm extends Component {
                     <FormEducationFundingHistory
                         nextStep={() => this.nextStep()}
                         previousStep={() => this.previousStep()}
-                        handleChange={() => this.handleChange()}
+                        handleChange={(input, e) => this.handleChange(input, e)}
                         values={values}
                         stepLabel={stepLabel}
                     />
@@ -260,7 +278,7 @@ export class UserForm extends Component {
                     <FormAcademicPerformance
                         nextStep={() => this.nextStep()}
                         previousStep={() => this.previousStep()}
-                        handleChange={() => this.handleChange()}
+                        handleChange={(input, e) => this.handleChange(input, e)}
                         values={values}
                         stepLabel={stepLabel}
                     />
@@ -270,7 +288,7 @@ export class UserForm extends Component {
                     <FormRefereesDetails
                         nextStep={() => this.nextStep()}
                         previousStep={() => this.previousStep()}
-                        handleChange={() => this.handleChange()}
+                        handleChange={(input, e) => this.handleChange(input, e)}
                         values={values}
                         stepLabel={stepLabel}
                     />
@@ -280,7 +298,7 @@ export class UserForm extends Component {
                     <FormAttachments
                         nextStep={() => this.nextStep()}
                         previousStep={() => this.previousStep()}
-                        handleChange={() => this.handleChange()}
+                        handleChange={(input, e) => this.handleChange(input, e)}
                         values={values}
                         stepLabel={stepLabel}
                     />
@@ -291,7 +309,7 @@ export class UserForm extends Component {
                     <FormDeclaration
                         nextStep={() => this.nextStep()}
                         previousStep={() => this.previousStep()}
-                        handleChange={() => this.handleChange()}
+                        handleChange={(input, e) => this.handleChange(input, e)}
                         values={values}
                         stepLabel={stepLabel}
                     />
@@ -310,7 +328,7 @@ export class UserForm extends Component {
             name,
             gender,
             dateOfBirth,
-            id,
+            idNo,
             institutionName,
             admissionNumber,
             institutionBranch,
@@ -332,26 +350,28 @@ export class UserForm extends Component {
             amountApplied,
             //Variables for page 2 Parent /guardian details
             familyStatus,
+            otherFamilyStatus,
             numberOfSiblings,
             estimateFamilyIncome,
             estimateFamilyExpenses,
+            livingParent,
             fatherName,
             fatherAddress,
             fatherTelephone,
             fatherOccupation,
-            fatherEmploment,
+            fatherEmployment,
             fatherMainIncomeSource,
             motherName,
             motherAddress,
             motherTelephone,
             motherOccupation,
-            motherEmploment,
+            motherEmployment,
             motherMainIncomeSource,
             guardianName,
             guardianAddress,
             guardianTelephone,
             guardianOccupation,
-            guardianEmploment,
+            guardianEmployment,
             guardianMainIncomeSource,
             //Variables for page 3 Siblings list
             siblingsList,
@@ -424,7 +444,7 @@ export class UserForm extends Component {
             name,
             gender,
             dateOfBirth,
-            id,
+            idNo,
             institutionName,
             admissionNumber,
             institutionBranch,
@@ -446,26 +466,28 @@ export class UserForm extends Component {
             amountApplied,
             //Variables for page 2 Parent /guardian details
             familyStatus,
+            otherFamilyStatus,
             numberOfSiblings,
             estimateFamilyIncome,
             estimateFamilyExpenses,
+            livingParent,
             fatherName,
             fatherAddress,
             fatherTelephone,
             fatherOccupation,
-            fatherEmploment,
+            fatherEmployment,
             fatherMainIncomeSource,
             motherName,
             motherAddress,
             motherTelephone,
             motherOccupation,
-            motherEmploment,
+            motherEmployment,
             motherMainIncomeSource,
             guardianName,
             guardianAddress,
             guardianTelephone,
             guardianOccupation,
-            guardianEmploment,
+            guardianEmployment,
             guardianMainIncomeSource,
             //Variables for page 3 Siblings list
             siblingsList,
@@ -538,9 +560,10 @@ export class UserForm extends Component {
 
         return (
             <div>
-                <MuiThemeProvider>
+                {/* <MuiThemeProvider> */}
+                <div className="form-container">
                     <div className="form-steps-small">
-                        </div>
+                    </div>
                     <div className="form-steps-large">
                         <Stepper activeStep={step - 1}>
                             {steps.map((label, index) => {
@@ -556,8 +579,8 @@ export class UserForm extends Component {
                     <div className="form-body">
                         {currentPage}
                     </div>
-
-                </MuiThemeProvider>
+                </div>
+                {/* </MuiThemeProvider> */}
             </div>
         );
     }

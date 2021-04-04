@@ -20,7 +20,7 @@ export class FormReligiousLeaderVerification extends Component {
     return (
       <MuiThemeProvider>
         <React.Fragment>
-          <h2>{stepLabel}</h2>
+          <h3>{stepLabel}</h3>
           <br />
           <RaisedButton
             label="Back"

@@ -1,0 +1,40 @@
+body{
+    /* background-color: grey; */
+}
+
+.form-steps-small{
+    
+}
+
+/* .form-container{
+    background-color: grey;
+    height: 100vh;
+} */
+
+.form-steps-large{
+    background-color: white;
+    top: 0;
+    position: sticky;
+    z-index: 1000;
+    margin-bottom: 20px;
+    box-shadow: 0px 4px 5px 3px rgba(0,0,0,0.48);
+    -webkit-box-shadow: 0px 4px 5px 3px rgba(0,0,0,0.48);
+    -moz-box-shadow: 0px 4px 5px 3px rgba(0,0,0,0.48);
+}
+
+.form-body{
+    margin: 0 auto;
+    padding-top: 5px;
+    width: 60%;
+    border-radius: 5px;
+    background-color: white;
+}
+
+.MuiBox-root{
+    width: 100%;
+}
+
+.MuiFormControl-root{
+    width: 80%;
+    margin: 0 auto;
+}
