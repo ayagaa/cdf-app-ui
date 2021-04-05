@@ -242,9 +242,9 @@ export class FormGuardianDetails extends Component {
                 }
                 onChange={(event) =>
                   handleChange(
-                    (values.livingParent === "1"
+                    values.livingParent === "1"
                       ? "fatherEmployment"
-                      : "motherEmployment"),
+                      : "motherEmployment",
                     event
                   )
                 }
@@ -685,6 +685,7 @@ export class FormGuardianDetails extends Component {
                 Family Status
               </InputLabel>
               <Select
+                autoFocus
                 label="Family Status"
                 value={values.familyStatus}
                 onChange={(event) => handleChange("familyStatus", event)}

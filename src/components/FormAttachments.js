@@ -1,49 +1,111 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import TextField from 'material-ui/TextField';
-import RaisedButton from 'material-ui/RaisedButton';
+import { FormControl, Button, Select, TextField } from "@material-ui/core";
+
+import Grid from "@material-ui/core/Grid";
+import InputLabel from "@material-ui/core/InputLabel";
+import Typography from "@material-ui/core/Typography";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Container from "@material-ui/core/Container";
+
+import { DropzoneArea } from "material-ui-dropzone";
 
 export class FormAttachments extends Component {
-  continue = e => {
-    e.preventDefault();
-    this.props.nextStep();
+  constructor(props) {
+    super(props);
+    this.state = {
+      files: [],
+    };
   }
 
-  goback = e => {
+  continue = (e) => {
+    e.preventDefault();
+    const { values } = this.props;
+    this.props.nextStep();
+  };
+
+  goback = (e) => {
     e.preventDefault();
     this.props.previousStep();
-  }
+  };
 
   render() {
-    const { values, stepLabel } = this.props;
+    const { values, stepLabel, handleChange } = this.props;
+
     return (
-      <MuiThemeProvider>
-        <React.Fragment>
-          <h3>{stepLabel}</h3>
+      <React.Fragment>
+        <Container component="main" maxWidth="lg">
+          <CssBaseline />
+          <Typography component="h1" variant="h5">
+            {stepLabel}
+          </Typography>
           <br />
-          <RaisedButton
-            label="Back"
-            primary={true}
-            style={styles.button}
-            onClick={this.goback}
-          />
-          <RaisedButton
-            label="Continue"
-            primary={true}
-            style={styles.button}
-            onClick={this.continue}
-          />
-        </React.Fragment>
-      </MuiThemeProvider>
-    )
+          <br />
+          <Typography component="h3" variant="h7" align="left">
+            <ul>
+              <li>
+                Students' transcript/ Report Form
+              </li>
+              <li>
+                Scan of parents' / guardians National Identity Card
+              </li>
+              <li>
+                Scan of students' National Identity Card (mandatory for post school students)
+              </li>
+              <li>
+                Scan of birth certificate
+              </li>
+              <li>
+                Scan of the secondary/ college/ university ID card (if applicable)
+              </li>
+              <li style={{display:values.familyStatus === "1" ? "block" : "none"}}>
+                Scan of death certificate/ burial permit (mandatory for orphans)
+              </li>
+              <li>
+                Scan of current fees structure (mandatory for all applicants)
+              </li>
+              <li>
+                Scan of admission letters (mandatory for colleges and university)
+              </li>
+            </ul>
+          </Typography>
+          <form>
+            <DropzoneArea
+              initialFiles={values.fileAttachments}
+              acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}
+              maxFileSize={5000000}
+              onChange={handleChange.bind(this)}
+            />
+            <br />
+            <br />
+            <Button
+              variant="contained"
+              color="primary"
+              style={styles.backButton}
+              onClick={this.goback}
+            >
+              Back
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              style={styles.button}
+              onClick={this.continue}
+            >
+              Save and Continue
+            </Button>
+          </form>
+        </Container>
+      </React.Fragment>
+    );
   }
 }
 
 const styles = {
   button: {
-    margin: 15
-  }
-}
+    margin: 15,
+  },
+};
 
-export default FormAttachments
+export default FormAttachments;

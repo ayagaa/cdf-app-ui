@@ -27,13 +27,11 @@ import Container from "@material-ui/core/Container";
 
 export class FormPersonalDetails extends Component {
   continue = (e) => {
-    console.log("Continue");
     e.preventDefault();
     this.props.nextStep();
   };
 
   goback = (e) => {
-    console.log("Go Back");
     e.preventDefault();
     this.props.previousStep();
   };

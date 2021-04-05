@@ -1,11 +1,6 @@
 import React, { Component } from "react";
 
-import {
-  FormControl,
-  Button,
-  Select,
-  TextField,
-} from "@material-ui/core";
+import { FormControl, Button, Select, TextField } from "@material-ui/core";
 
 import InputLabel from "@material-ui/core/InputLabel";
 import Typography from "@material-ui/core/Typography";
@@ -25,6 +20,7 @@ export class FormSiblingDetails extends Component {
     id: "",
     name: "",
     institutionType: "",
+    institutionName: "",
     feesPayable: null,
   };
 
@@ -65,6 +61,12 @@ export class FormSiblingDetails extends Component {
     });
   };
 
+  setInstitutionName = (inputName) => {
+    this.setState({
+      institutionName: inputName,
+    });
+  };
+
   setFeesAmount = (inputAmount) => {
     this.setState({
       feesPayable: inputAmount,
@@ -74,12 +76,12 @@ export class FormSiblingDetails extends Component {
   addSibling = () => {
     const { handleChange } = this.props;
     handleChange("siblingsList", this.state);
-    const nameField = document.getElementById('nameField');
-    const institutionSelect = document.getElementById('institutionSelect');
-    const feesField = document.getElementById('feesField');
+    const nameField = document.getElementById("nameField");
+    const institutionSelect = document.getElementById("institutionSelect");
+    const feesField = document.getElementById("feesField");
 
-    nameField.value = '';
-    institutionSelect.innerHTML = '';
+    nameField.value = "";
+    institutionSelect.innerHTML = "";
     feesField.value = null;
   };
 
@@ -106,9 +108,12 @@ export class FormSiblingDetails extends Component {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell width={75}>S/No.</TableCell>
-                <TableCell width={200}>Name</TableCell>
+                <TableCell width={50} visible={false}>
+                  S/No.
+                </TableCell>
+                <TableCell width={170}>Name</TableCell>
                 <TableCell>Institution Type</TableCell>
+                <TableCell>Institution Name</TableCell>
                 <TableCell width={100}>Annual Fees (Kshs)</TableCell>
               </TableRow>
             </TableHead>
@@ -120,6 +125,7 @@ export class FormSiblingDetails extends Component {
                   </TableCell>
                   <TableCell>{row.name}</TableCell>
                   <TableCell>{row.institutionType}</TableCell>
+                  <TableCell>{row.institutionName}</TableCell>
                   <TableCell>{row.feesPayable}</TableCell>
                 </TableRow>
               ))}
@@ -143,78 +149,92 @@ export class FormSiblingDetails extends Component {
           </Typography>
           <br />
           <br />
-          <TextField
-            id="nameField"
-            label="Name"
-            onChange={(event) => this.setIdAndName(event.target.value)}
-            defaultValue={this.state.name}
-            variant="outlined"
-          />
-          <br />
-          <br />
-          <FormControl variant="outlined">
-            <InputLabel htmlFor="outlined-age-native-simple">
-              Type of Education Institution
-            </InputLabel>
-            <Select
-            id="institutionSelect"
-              label="Type of Education Institution"
-              value={this.state.institutionType}
-              onChange={(event) => this.setInstitutionType(event.target.value)}
+          <form>
+            <TextField
+              autoFocus
+              id="nameField"
+              label="Name"
+              onChange={(event) => this.setIdAndName(event.target.value)}
+              defaultValue={this.state.name}
+              variant="outlined"
+            />
+            <br />
+            <br />
+            <FormControl variant="outlined">
+              <InputLabel htmlFor="outlined-age-native-simple">
+                Type of Education Institution
+              </InputLabel>
+              <Select
+                id="institutionSelect"
+                label="Type of Education Institution"
+                value={this.state.institutionType}
+                onChange={(event) =>
+                  this.setInstitutionType(event.target.value)
+                }
+              >
+                <option value={"School"}>School</option>
+                <option value={"College"}>College</option>
+                <option value={"University"}>University</option>
+              </Select>
+            </FormControl>
+            <br />
+            <br />
+            <TextField
+              id="institutionName"
+              label="Institution Name"
+              onChange={(event) => this.setInstitutionName(event.target.value)}
+              defaultValue={this.state.institutionName}
+              variant="outlined"
+            />
+            <br />
+            <br />
+            <TextField
+              id="feesField"
+              label="Annual Fees Payable (Kshs)"
+              type="number"
+              onChange={(event) => this.setFeesAmount(event.target.value)}
+              defaultValue={this.state.feesPayable}
+              variant="outlined"
+            />
+            <br />
+            <br />
+            <Button
+              // type="submit"
+              variant="contained"
+              color="secondary"
+              style={styles.button}
+              onClick={this.addSibling}
             >
-              <option value={"School"}>School</option>
-              <option value={"College"}>College</option>
-              <option value={"University"}>University</option>
-            </Select>
-          </FormControl>
-          <br />
-          <br />
-          <TextField
-          id="feesField"
-            label="Annual Fees Payable (Kshs)"
-            type="number"
-            onChange={(event) => this.setFeesAmount(event.target.value)}
-            defaultValue={this.state.feesPayable}
-            variant="outlined"
-          />
-          <br />
-          <br />
-          <Button
-            // type="submit"
-            variant="contained"
-            color="secondary"
-            style={styles.button}
-            onClick={this.addSibling}
-          >
-            Add Sibling
-          </Button>
-          <br />
-          <br />
-          {showDataGrid}
-          <br />
-          <br />
-          <Button
-            type="submit"
-            // fullWidth
-            variant="contained"
-            color="primary"
-            style={styles.backButton}
-            onClick={this.goback}
-            // className={classes.submit}
-          >
-            Back
-          </Button>
-          <Button
-            type="submit"
-            // fullWidth
-            variant="contained"
-            color="primary"
-            style={styles.button}
-            onClick={this.continue}
-            // className={classes.submit}
-          >
-            Save and Continue
-          </Button>
+              Add Sibling
+            </Button>
+            <br />
+            <br />
+            {showDataGrid}
+            <br />
+            <br />
+            <Button
+              // type="submit"
+              // fullWidth
+              variant="contained"
+              color="primary"
+              style={styles.backButton}
+              onClick={this.goback}
+              // className={classes.submit}
+            >
+              Back
+            </Button>
+            <Button
+              type="submit"
+              // fullWidth
+              variant="contained"
+              color="primary"
+              style={styles.button}
+              onClick={this.continue}
+              // className={classes.submit}
+            >
+              Save and Continue
+            </Button>
+          </form>
         </Container>
       </React.Fragment>
     );
