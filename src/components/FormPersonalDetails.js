@@ -41,9 +41,70 @@ export class FormPersonalDetails extends Component {
     handleChange("dateOfBirth", date);
   };
 
+  handleYearChange = (date) => {
+    const { handleChange } = this.props;
+    handleChange("yearOfCompletion", date);
+  };
+
+  tertiaryLevelDetails = (values, handleChange) => {
+    if (values.levelOfStudy === "1") {
+      return <div></div>;
+    } else if (values.levelOfStudy === "2" || values.levelOfStudy === "3") {
+      return (
+        <div>
+          <TextField
+            label="ID No./ Passport No."
+            onChange={(event) => handleChange("idNo", event)}
+            defaultValue={values.idNo}
+            variant="outlined"
+          />
+          <br />
+          <br />
+          <TextField
+            label="Admission/ Registration No."
+            onChange={(event) => handleChange("admissionNumber", event)}
+            defaultValue={values.admissionNumber}
+            variant="outlined"
+          />
+          <br />
+          <br />
+          <TextField
+            label="Campus/ Branch"
+            onChange={(event) => handleChange("institutionBranch", event)}
+            defaultValue={values.institutionBranch}
+            variant="outlined"
+          />
+          <br />
+          <br />
+          <TextField
+            label="Faculty/ Department"
+            onChange={(event) => handleChange("department", event)}
+            defaultValue={values.department}
+            variant="outlined"
+          />
+          <br />
+          <br />
+          <TextField
+            label="Course of study"
+            onChange={(event) => handleChange("course", event)}
+            defaultValue={values.course}
+            variant="outlined"
+          />
+          <br />
+          <br />
+        </div>
+      );
+    } else {
+      return <div></div>;
+    }
+  };
+
   render() {
     const { values, stepLabel, handleChange } = this.props;
     const genderItems = ["Female", "Male"];
+
+    const showTertiaryDetails = this.tertiaryLevelDetails(values, handleChange);
+
     return (
       <React.Fragment>
         <Container component="main" maxWidth="lg">
@@ -69,14 +130,16 @@ export class FormPersonalDetails extends Component {
             <br />
             <br />
             <FormControl variant="outlined">
-              <InputLabel htmlFor="outlined-age-native-simple">Gender</InputLabel>
+              <InputLabel htmlFor="outlined-age-native-simple">
+                Gender
+              </InputLabel>
               <Select
                 label="Gender"
                 value={values.gender}
                 onChange={(event) => handleChange("gender", event)}
                 inputProps={{
                   name: "familyStatus",
-                  id: 'outlined-age-native-simple'
+                  id: "outlined-age-native-simple",
                 }}
               >
                 <option value={"Female"}>Female</option>
@@ -119,50 +182,74 @@ export class FormPersonalDetails extends Component {
               </Grid>
             </MuiPickersUtilsProvider>
             <br />
+            <br />
+            <FormControl variant="outlined">
+              <InputLabel htmlFor="outlined-age-native-simple">
+                Level of studies
+              </InputLabel>
+              <Select
+                autoFocus={false}
+                label="Level of studies"
+                value={values.levelOfStudy}
+                onChange={(event) => handleChange("levelOfStudy", event)}
+                inputProps={{
+                  name: "levelOfStudy",
+                  id: "outlined-age-native-simple",
+                }}
+                // onChange={(event) => console.log(event)}
+              >
+                <option value={"1"}>School</option>
+                <option value={"2"}>College</option>
+                <option value={"3"}>University</option>
+              </Select>
+            </FormControl>
+            <br />
+            <br />
+
+            {showTertiaryDetails}
+
             <TextField
-              label="ID No./ Passport No."
-              onChange={(event) => handleChange("idNo", event)}
-              defaultValue={values.idNo}
+              label="Class/ Grade/ Year of Study"
+              type="number"
+              onChange={(event) => handleChange("grade", event)}
+              defaultValue={values.grade}
               variant="outlined"
             />
             <br />
             <br />
             <TextField
-              label="School/ College/ University"
-              onChange={(event) => handleChange("institutionName", event)}
-              defaultValue={values.institutionName}
+              label="Course duration (in years)"
+              type="number"
+              onChange={(event) => handleChange("courseDuration", event)}
+              defaultValue={values.courseDuration}
               variant="outlined"
             />
             <br />
             <br />
-            <TextField
-              label="Admission/ Registration No."
-              onChange={(event) => handleChange("admissionNumber", event)}
-              defaultValue={values.admissionNumber}
-              variant="outlined"
-            />
+            <MuiPickersUtilsProvider utils={MomentUtils}>
+              <Grid container justify="space-around">
+                <KeyboardDatePicker
+                  label="Expected month and year of completion"
+                  keyboard
+                  placeholder="MM/YY"
+                  format={"MM/YY"}
+                  mask={(value) => (value ? [/\d/, /\d/, "/", /\d/, /\d/] : [])}
+                  value={values.yearOfCompletion}
+                  onChange={this.handleYearChange}
+                  disableOpenOnEnter
+                  animateYearScrolling={false}
+                  autoOk={true}
+                  clearable
+                  variant="outlined"
+                />
+              </Grid>
+            </MuiPickersUtilsProvider>
             <br />
             <br />
             <TextField
-              label="Campus/ Branch"
-              onChange={(event) => handleChange("institutionBranch", event)}
-              defaultValue={values.institutionBranch}
-              variant="outlined"
-            />
-            <br />
-            <br />
-            <TextField
-              label="Faculty/ Department"
-              onChange={(event) => handleChange("department", event)}
-              defaultValue={values.department}
-              variant="outlined"
-            />
-            <br />
-            <br />
-            <TextField
-              label="School/ College/ University"
-              onChange={(event) => handleChange("institutionName", event)}
-              defaultValue={values.institutionName}
+              label="Mobile/ Telephone Number"
+              onChange={(event) => handleChange("phoneNumber", event)}
+              defaultValue={values.phoneNumber}
               variant="outlined"
             />
             <br />
@@ -222,7 +309,7 @@ export class FormPersonalDetails extends Component {
             <br />
             <TextField
               label="Institution Telephone Number"
-              onChange={(event) => handleChange("institionPhoneNumber", event)}
+              onChange={(event) => handleChange("institutionPhoneNumber", event)}
               defaultValue={values.institutionPhoneNumber}
               variant="outlined"
             />

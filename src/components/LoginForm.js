@@ -17,9 +17,11 @@ import Container from "@material-ui/core/Container";
 
 import "./styles/CDFImage.css";
 
+import { loginUser } from "../store/epic/applicationEpic";
+
 const initialFormData = Object.freeze({
-  email: "",
-  password: "",
+  userEmail: "",
+  userPassword: "",
 });
 
 function Copyright() {
@@ -78,19 +80,21 @@ function LoginForm(props) {
 
     console.log(formData);
     // ... submit to API
-    // const [apiCall, apiDispatch] = window.store.banking;
-    // loginUser(formData.email, formData.password, apiDispatch)
-    // .then((result) => {
-    //   const [banking] = window.store.banking;
+    const [apiCall, apiDispatch] = window.store.application;
+    loginUser(formData.userEmail, formData.userPassword, apiDispatch)
+    .then((result) => {
+      const [application] = window.store.application;
 
-    //   if(banking.authUser && banking.authUser.isAuthenticated){
-    //     history.push("/transaction");
-    //   }else if(banking.authUser && !banking.authUser.isAuthenticated){
-    //     alert(banking.authUser.message);
-    //   }else{
-    //     alert("Oops! Something went wrong. Please try again.");
-    //   }
-    // });
+      if(application.authUser && application.authUser.isAuthenticated){
+        // console.log(application.authUser);
+        
+        history.push("/application-form");
+      }else if(application.authUser && !application.authUser.isAuthenticated){
+        alert(application.authUser.userToken);
+      }else{
+        alert("Oops! Something went wrong. Please try again.");
+      }
+    });
   };
 
   const register = (e) => {
@@ -113,28 +117,30 @@ function LoginForm(props) {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate onSubmit={submit}>
+        <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            id="email"
+            id="userEmail"
             label="Email Address"
-            name="email"
+            name="userEmail"
             autoComplete="email"
             autoFocus
+            onChange={handleChange}
           />
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            name="password"
+            name="userPassword"
             label="Password"
             type="password"
-            id="password"
+            id="userPassword"
             autoComplete="current-password"
+            onChange={handleChange}
           />
           <Button
             type="submit"

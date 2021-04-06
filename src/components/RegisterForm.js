@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 
 import Button from "@material-ui/core/Button";
@@ -13,9 +13,13 @@ import Container from "@material-ui/core/Container";
 
 import "./styles/CDFImage.css";
 
+import { registerUser } from "../store/epic/applicationEpic";
+
 const initialFormData = Object.freeze({
-  email: "",
-  password: "",
+  firstName: "",
+  lastName: "",
+  userEmail: "",
+  userPassword: "",
 });
 
 function Copyright() {
@@ -74,19 +78,20 @@ function RegisterForm(props) {
 
     console.log(formData);
     // ... submit to API
-    // const [apiCall, apiDispatch] = window.store.banking;
-    // loginUser(formData.email, formData.password, apiDispatch)
-    // .then((result) => {
-    //   const [banking] = window.store.banking;
+    const [apiCall, apiDispatch] = window.store.application;
+    registerUser(formData.userEmail, formData.userPassword, apiDispatch).then(
+      (result) => {
+        const [application] = window.store.application;
 
-    //   if(banking.authUser && banking.authUser.isAuthenticated){
-    //     history.push("/transaction");
-    //   }else if(banking.authUser && !banking.authUser.isAuthenticated){
-    //     alert(banking.authUser.message);
-    //   }else{
-    //     alert("Oops! Something went wrong. Please try again.");
-    //   }
-    // });
+        if(application.appUser && application.appUser.isSuccessfull) {
+          history.push("/");
+        } else if(application.appUser && !application.appUser.isSuccessfull) {
+          alert(application.appUser.message);
+        } else {
+          alert("Oops! Something went wrong. Please try again.");
+        }
+      }
+    );
   };
 
   const handleClick = (e) => {
@@ -116,6 +121,7 @@ function RegisterForm(props) {
             name="firstName"
             autoComplete="firstName"
             autoFocus
+            onChange={handleChange}
           />
           <TextField
             variant="outlined"
@@ -126,6 +132,7 @@ function RegisterForm(props) {
             label="Last Name"
             name="lastName"
             autoComplete="lastName"
+            onChange={handleChange}
             //autoFocus
           />
           <TextField
@@ -133,10 +140,11 @@ function RegisterForm(props) {
             margin="normal"
             required
             fullWidth
-            id="email"
+            id="userEmail"
             label="Email Address"
-            name="email"
+            name="userEmail"
             autoComplete="email"
+            onChange={handleChange}
             //autoFocus
           />
           <TextField
@@ -144,22 +152,12 @@ function RegisterForm(props) {
             margin="normal"
             required
             fullWidth
-            name="password"
+            name="userPassword"
             label="Password"
             type="password"
-            id="password"
+            id="userPassword"
             autoComplete="current-password"
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="confirmPassword"
-            label="Confirm Password"
-            type="password"
-            id="confirm-password"
-            autoComplete="current-password"
+            onChange={handleChange}
           />
           <Button
             type="submit"
@@ -167,6 +165,7 @@ function RegisterForm(props) {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={handleSubmit}
           >
             Register
           </Button>

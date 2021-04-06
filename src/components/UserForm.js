@@ -4,6 +4,7 @@ import "./styles/UserForm.css";
 
 import moment from "moment";
 
+import Typography from "@material-ui/core/Typography";
 // import Stepper from 'material-ui/Stepper/Stepper';
 // import Step from 'material-ui/Stepper/Step';
 // import StepLabel from 'material-ui/Stepper/StepLabel';
@@ -26,14 +27,21 @@ import FormRefereesDetails from "./FormRefereesDetails";
 import FormSiblingDetails from "./FormSiblingDetails";
 import FormVerifierDetails from "./FormVerifierDetails";
 
+import { applicationPost } from "../store/epic/applicationEpic";
+
 export class UserForm extends Component {
   state = {
+    userEmail:"",
+    userPassword: "",
+    isAuthenticated: false,
+    userToken: "",
     step: 1,
     //Variables for page 1 Personal details
     name: "",
     gender: "",
     dateOfBirth: null,
     idNo: "",
+    levelOfStudy: "",
     institutionName: "",
     admissionNumber: "",
     institutionBranch: "",
@@ -42,7 +50,7 @@ export class UserForm extends Component {
     modeOfStudy: "",
     grade: "",
     courseDuration: "",
-    yearOfCompletion: 2021,
+    yearOfCompletion: null,
     phoneNumber: "",
     pollingStation: "",
     ward: "",
@@ -131,21 +139,22 @@ export class UserForm extends Component {
     chiefLocation: "",
     chiefSublocation: "",
     //Variables for page 8 Attachments
-    studentTranscriptCopy: null,
-    guardianIDCopy: null,
-    studentIdCopy: null,
-    studentBirthCertificate: null,
-    institutionIdCopy: null,
-    deathCertificatesCopy: null,
-    feeStructureCopy: null,
-    admissionLetterCopy: null,
     fileAttachments: [],
     //Variables for page 9 guardian and student declaration
-    hasStudentVerified: "",
-    studentVerifiedDate: null,
-    hasGuardianVerified: "",
-    guardianVerifiedDate: null,
+    //Approvals
+    religiousLeaderApproved: "",
+    administratorApproved: "",
+    pollingStationApproval: "",
+    pollingStationRejectReasons:"",
+    cdfCommitteeApproval: "",
+    cdfCommitteeRejectReasons:"",
+    amountApproved: 0
   };
+
+  componentDidMount = () =>{
+      const [application] = window.store.application;
+      this.handleLogin(application.authUser);
+  }
 
   getSteps = () => {
     return [
@@ -189,11 +198,361 @@ export class UserForm extends Component {
     }
   };
 
+  handleLogin = (loginState) => {
+      if(loginState){
+          this.setState({
+            userEmail: loginState.userEmail,
+            userPassword: loginState.userPassword,
+            isAuthenticated: loginState.isAuthenticated,
+            userToken: loginState.userToken,
+            step: loginState.step,
+            name: loginState.name,
+            gender: loginState.gender,
+            dateOfBirth: loginState.dateOfBirth,
+            idNo: loginState.idNo,
+            levelOfStudy: loginState.levelOfStudy,
+            institutionName: loginState.institutionName,
+            admissionNumber: loginState.admissionNumber,
+            institutionBranch: loginState.institutionBranch,
+            department: loginState.department,
+            course: loginState.course,
+            modeOfStudy: loginState.modeOfStudy,
+            grade: loginState.grade,
+            courseDuration: loginState.courseDuration,
+            yearOfCompletion: loginState.yearOfCompletion,
+            phoneNumber: loginState.phoneNumber,
+            pollingStation: loginState.pollingStation,
+            ward: loginState.ward,
+            location: loginState.location,
+            subLocation: loginState.subLocation,
+            physicalAddress: loginState.physicalAddress,
+            permanentAddress: loginState.permanentAddress,
+            institutionAddress: loginState.institutionAddress,
+            institutionPhoneNumber: loginState.institutionPhoneNumber,
+            amountApplied: loginState.amountApplied,
+            familyStatus: loginState.familyStatus,
+            otherFamilyStatus: loginState.otherFamilyStatus,
+            numberOfSiblings: loginState.numberOfSiblings,
+            estimateFamilyIncome: loginState.estimateFamilyIncome,
+            estimateFamilyExpenses: loginState.estimateFamilyExpenses,
+            livingParent: loginState.livingParent,
+            fatherName: loginState.fatherName,
+            fatherAddress: loginState.fatherAddress,
+            fatherTelephone: loginState.fatherTelephone,
+            fatherOccupation: loginState.fatherOccupation,
+            fatherEmployment: loginState.fatherEmployment,
+            fatherMainIncomeSource: loginState.fatherMainIncomeSource,
+            motherName: loginState.motherName,
+            motherAddress: loginState.motherAddress,
+            motherTelephone: loginState.motherTelephone,
+            motherOccupation: loginState.motherOccupation,
+            motherEmployment: loginState.motherEmployment,
+            motherMainIncomeSource: loginState.motherMainIncomeSource,
+            guardianName: loginState.guardianName,
+            guardianAddress: loginState.guardianAddress,
+            guardianTelephone: loginState.guardianTelephone,
+            guardianOccupation: loginState.guardianOccupation,
+            guardianEmployment: loginState.guardianEmployment,
+            guardianMainIncomeSource: loginState.guardianMainIncomeSource,
+            siblingsList: loginState.siblingsList,
+            applicationReason: loginState.applicationReason,
+            hasPreviousBursary: loginState.hasPreviousBursary,
+            previousBursaryAmount: loginState.previousBursaryAmount,
+            previousBursaryDate: loginState.previousBursaryDate,
+            previousFinancialSupport: loginState.previousFinancialSupport,
+            previousFinancialSupportDetails: loginState.previousFinancialSupportDetails,
+            hasPhysicalImpairment: loginState.hasPhysicalImpairment,
+            physicalImpairmentDetails: loginState.physicalImpairmentDetails,
+            hasChronicIllness: loginState.hasChronicIllness,
+            chronicIllnessDetails: loginState.chronicIllnessDetails,
+            hasDisabledParent: loginState.hasDisabledParent,
+            disableParentDetails: loginState.disableParentDetails,
+            hasParentChronicIllness: loginState.hasParentChronicIllness,
+            parentChronicIllnessDetails: loginState.parentChronicIllnessDetails,
+            secondaryMainFundingSource: loginState.secondaryMainFundingSource,
+            collegeMainFundingSource: loginState.collegeMainFundingSource,
+            universityMainFundingSource: loginState.universityMainFundingSource,
+            secondaryOtherFundingSource: loginState.secondaryOtherFundingSource,
+            collegeOtherFundingSource: loginState.collegeOtherFundingSource,
+            universityOtherFundingSource: loginState.universityOtherFundingSource,
+            averageAcademicPerformance: loginState.averageAcademicPerformance,
+            hasAbsenceRecord: loginState.hasAbsenceRecord,
+            absenceReason: loginState.absenceReason,
+            absenceDuration: loginState.absenceDuration,
+            totalAnnualFees: loginState.totalAnnualFees,
+            lastSemesterBalance: loginState.lastSemesterBalance,
+            currentSemesterBalance: loginState.currentSemesterBalance,
+            nextSemesterBalance: loginState.nextSemesterBalance,
+            helbLoanReceived: loginState.helbLoanReceived,
+            referee1Name: loginState.referee1Name,
+            referee1Address: loginState.referee1Address,
+            referee1PhoneNumber: loginState.referee1PhoneNumber,
+            referee2Name: loginState.referee2Name,
+            referee2Address: loginState.referee2Address,
+            referee2PhoneNumber: loginState.referee2PhoneNumber,
+            religiousLeaderName: loginState.religiousLeaderName,
+            religiousLeaderEmail: loginState.religiousLeaderEmail,
+            religiousLeaderPhone: loginState.religiousLeaderPhone,
+            religiousLeaderReligionName: loginState.religiousLeaderReligionName,
+            religiousLeaderReligionType: loginState.religiousLeaderReligionType,
+            otherReligionDetials: loginState.otherReligionDetials,
+            chiefName: loginState.chiefName,
+            chiefEmail: loginState.chiefEmail,
+            chiefPhone: loginState.chiefPhone,
+            chiefLocation: loginState.chiefLocation,
+            chiefSublocation: loginState.chiefSublocation,
+            fileAttachments: loginState.fileAttachments,
+            religiousLeaderApproved: loginState.religiousLeaderApproved,
+            administratorApproved: loginState.administratorApproved,
+            pollingStationApproval: loginState.pollingStationApproval,
+            pollingStationRejectReasons: loginState.pollingStationRejectReasons,
+            cdfCommitteeApproval: loginState.cdfCommitteeApproval,
+            cdfCommitteeRejectReasons: loginState.cdfCommitteeRejectReasons,
+            amountApproved: loginState.amountApproved
+          });
+      }
+  } 
+
   nextStep = () => {
-    const { step } = this.state;
-    this.setState({
-      step: step + 1,
-    });
+    //const { step } = this.state;
+    const {
+        userEmail,
+        userPassword,
+        isAuthenticated,
+        userToken,
+        step,
+        name,
+        gender,
+        dateOfBirth,
+        idNo,
+        levelOfStudy,
+        institutionName,
+        admissionNumber,
+        institutionBranch,
+        department,
+        course,
+        modeOfStudy,
+        grade,
+        courseDuration,
+        yearOfCompletion,
+        phoneNumber,
+        pollingStation,
+        ward,
+        location,
+        subLocation,
+        physicalAddress,
+        permanentAddress,
+        institutionAddress,
+        institutionPhoneNumber,
+        amountApplied,
+        familyStatus,
+        otherFamilyStatus,
+        numberOfSiblings,
+        estimateFamilyIncome,
+        estimateFamilyExpenses,
+        livingParent,
+        fatherName,
+        fatherAddress,
+        fatherTelephone,
+        fatherOccupation,
+        fatherEmployment,
+        fatherMainIncomeSource,
+        motherName,
+        motherAddress,
+        motherTelephone,
+        motherOccupation,
+        motherEmployment,
+        motherMainIncomeSource,
+        guardianName,
+        guardianAddress,
+        guardianTelephone,
+        guardianOccupation,
+        guardianEmployment,
+        guardianMainIncomeSource,
+        siblingsList,
+        applicationReason,
+        hasPreviousBursary,
+        previousBursaryAmount,
+        previousBursaryDate,
+        previousFinancialSupport,
+        previousFinancialSupportDetails,
+        hasPhysicalImpairment,
+        physicalImpairmentDetails,
+        hasChronicIllness,
+        chronicIllnessDetails,
+        hasDisabledParent,
+        disableParentDetails,
+        hasParentChronicIllness,
+        parentChronicIllnessDetails,
+        secondaryMainFundingSource,
+        collegeMainFundingSource,
+        universityMainFundingSource,
+        secondaryOtherFundingSource,
+        collegeOtherFundingSource,
+        universityOtherFundingSource,
+        averageAcademicPerformance,
+        hasAbsenceRecord,
+        absenceReason,
+        absenceDuration,
+        totalAnnualFees,
+        lastSemesterBalance,
+        currentSemesterBalance,
+        nextSemesterBalance,
+        helbLoanReceived,
+        referee1Name,
+        referee1Address,
+        referee1PhoneNumber,
+        referee2Name,
+        referee2Address,
+        referee2PhoneNumber,
+        religiousLeaderName,
+        religiousLeaderEmail,
+        religiousLeaderPhone,
+        religiousLeaderReligionName,
+        religiousLeaderReligionType,
+        otherReligionDetials,
+        chiefName,
+        chiefEmail,
+        chiefPhone,
+        chiefLocation,
+        chiefSublocation,
+        fileAttachments,
+        religiousLeaderApproved,
+        administratorApproved,
+        pollingStationApproval,
+        pollingStationRejectReasons,
+        cdfCommitteeApproval,
+        cdfCommitteeRejectReasons,
+        amountApproved
+      } = this.state;
+
+      this.setState({
+        step: step + 1,
+      });
+
+      const applicationDetails = {
+        userEmail: userEmail,
+        userPassword: userPassword,
+        isAuthenticated: isAuthenticated,
+        userToken: userToken,
+        step: step,
+        name: name,
+        gender: gender,
+        dateOfBirth: dateOfBirth,
+        idNo: idNo,
+        levelOfStudy: levelOfStudy,
+        institutionName: institutionName,
+        admissionNumber: admissionNumber,
+        institutionBranch: institutionBranch,
+        department: department,
+        course: course,
+        modeOfStudy: modeOfStudy,
+        grade: grade,
+        courseDuration: courseDuration,
+        yearOfCompletion: yearOfCompletion,
+        phoneNumber: phoneNumber,
+        pollingStation: pollingStation,
+        ward: ward,
+        location: location,
+        subLocation: subLocation,
+        physicalAddress: physicalAddress,
+        permanentAddress: permanentAddress,
+        institutionAddress: institutionAddress,
+        institutionPhoneNumber: institutionPhoneNumber,
+        amountApplied: amountApplied,
+        familyStatus: familyStatus,
+        otherFamilyStatus: otherFamilyStatus,
+        numberOfSiblings: numberOfSiblings,
+        estimateFamilyIncome: estimateFamilyIncome,
+        estimateFamilyExpenses: estimateFamilyExpenses,
+        livingParent: livingParent,
+        fatherName: fatherName,
+        fatherAddress: fatherAddress,
+        fatherTelephone: fatherTelephone,
+        fatherOccupation: fatherOccupation,
+        fatherEmployment: fatherEmployment,
+        fatherMainIncomeSource: fatherMainIncomeSource,
+        motherName: motherName,
+        motherAddress: motherAddress,
+        motherTelephone: motherTelephone,
+        motherOccupation: motherOccupation,
+        motherEmployment: motherEmployment,
+        motherMainIncomeSource: motherMainIncomeSource,
+        guardianName: guardianName,
+        guardianAddress: guardianAddress,
+        guardianTelephone: guardianTelephone,
+        guardianOccupation: guardianOccupation,
+        guardianEmployment: guardianEmployment,
+        guardianMainIncomeSource: guardianMainIncomeSource,
+        siblingsList: siblingsList,
+        applicationReason: applicationReason,
+        hasPreviousBursary: hasPreviousBursary,
+        previousBursaryAmount: previousBursaryAmount,
+        previousBursaryDate: previousBursaryDate,
+        previousFinancialSupport: previousFinancialSupport,
+        previousFinancialSupportDetails: previousFinancialSupportDetails,
+        hasPhysicalImpairment: hasPhysicalImpairment,
+        physicalImpairmentDetails: physicalImpairmentDetails,
+        hasChronicIllness: hasChronicIllness,
+        chronicIllnessDetails: chronicIllnessDetails,
+        hasDisabledParent: hasDisabledParent,
+        disableParentDetails: disableParentDetails,
+        hasParentChronicIllness: hasParentChronicIllness,
+        parentChronicIllnessDetails: parentChronicIllnessDetails,
+        secondaryMainFundingSource: secondaryMainFundingSource,
+        collegeMainFundingSource: collegeMainFundingSource,
+        universityMainFundingSource: universityMainFundingSource,
+        secondaryOtherFundingSource: secondaryOtherFundingSource,
+        collegeOtherFundingSource: collegeOtherFundingSource,
+        universityOtherFundingSource: universityOtherFundingSource,
+        averageAcademicPerformance: averageAcademicPerformance,
+        hasAbsenceRecord: hasAbsenceRecord,
+        absenceReason: absenceReason,
+        absenceDuration: absenceDuration,
+        totalAnnualFees: totalAnnualFees,
+        lastSemesterBalance: lastSemesterBalance,
+        currentSemesterBalance: currentSemesterBalance,
+        nextSemesterBalance: nextSemesterBalance,
+        helbLoanReceived: helbLoanReceived,
+        referee1Name: referee1Name,
+        referee1Address: referee1Address,
+        referee1PhoneNumber: referee1PhoneNumber,
+        referee2Name: referee2Name,
+        referee2Address: referee2Address,
+        referee2PhoneNumber: referee2PhoneNumber,
+        religiousLeaderName: religiousLeaderName,
+        religiousLeaderEmail: religiousLeaderEmail,
+        religiousLeaderPhone: religiousLeaderPhone,
+        religiousLeaderReligionName: religiousLeaderReligionName,
+        religiousLeaderReligionType: religiousLeaderReligionType,
+        otherReligionDetials: otherReligionDetials,
+        chiefName: chiefName,
+        chiefEmail: chiefEmail,
+        chiefPhone: chiefPhone,
+        chiefLocation: chiefLocation,
+        chiefSublocation: chiefSublocation,
+        fileAttachments: fileAttachments,
+        religiousLeaderApproved: religiousLeaderApproved,
+        administratorApproved: administratorApproved,
+        pollingStationApproval: pollingStationApproval,
+        pollingStationRejectReasons: pollingStationRejectReasons,
+        cdfCommitteeApproval: cdfCommitteeApproval,
+        cdfCommitteeRejectReasons: cdfCommitteeRejectReasons,
+        amountApproved: amountApproved
+      }
+
+        // ... submit to API
+        const [apiCall, apiDispatch] = window.store.application;
+        console.log(applicationDetails);
+        applicationPost(applicationDetails, apiDispatch)
+        .then((result) => {
+          const [application] = window.store.application;
+
+          if(application.userApplication){
+              console.log(application.userApplication);
+          }
+        });
+
   };
 
   previousStep = () => {
@@ -217,10 +576,11 @@ export class UserForm extends Component {
       this.setState({
         siblingsList: siblingsList,
       });
-    } else if (input === "dateOfBirth" && moment(e).isValid()) {
-      inputValue = e;
-      this.setState({ [input]: inputValue });
-    } else if (input === "previousBursaryDate" && moment(e).isValid()) {
+    } else if (
+      input === "dateOfBirth" ||
+      input === "yearOfCompletion" ||
+      (input === "previousBursaryDate" && moment(e).isValid())
+    ) {
       inputValue = e;
       this.setState({ [input]: inputValue });
     } else if (e && e.target && e.target.value) {
@@ -336,6 +696,7 @@ export class UserForm extends Component {
       gender,
       dateOfBirth,
       idNo,
+      levelOfStudy,
       institutionName,
       admissionNumber,
       institutionBranch,
@@ -433,20 +794,16 @@ export class UserForm extends Component {
       chiefLocation,
       chiefSublocation,
       //Variables for page 8 Attachments
-      studentTranscriptCopy,
-      guardianIDCopy,
-      studentIdCopy,
-      studentBirthCertificate,
-      institutionIdCopy,
-      deathCertificatesCopy,
-      feeStructureCopy,
-      admissionLetterCopy,
       fileAttachments,
       //Variables for page 9 guardian and student declaration
-      hasStudentVerified,
-      studentVerifiedDate,
-      hasGuardianVerified,
-      guardianVerifiedDate,
+      //Approvals
+      religiousLeaderApproved,
+      administratorApproved,
+      pollingStationApproval,
+      pollingStationRejectReasons,
+      cdfCommitteeApproval,
+      cdfCommitteeRejectReasons,
+      amountApproved
     } = this.state;
 
     const values = {
@@ -455,6 +812,7 @@ export class UserForm extends Component {
       gender,
       dateOfBirth,
       idNo,
+      levelOfStudy,
       institutionName,
       admissionNumber,
       institutionBranch,
@@ -552,20 +910,16 @@ export class UserForm extends Component {
       chiefLocation,
       chiefSublocation,
       //Variables for page 8 Attachments
-      studentTranscriptCopy,
-      guardianIDCopy,
-      studentIdCopy,
-      studentBirthCertificate,
-      institutionIdCopy,
-      deathCertificatesCopy,
-      feeStructureCopy,
-      admissionLetterCopy,
       fileAttachments,
       //Variables for page 10 guardian and student declaration
-      hasStudentVerified,
-      studentVerifiedDate,
-      hasGuardianVerified,
-      guardianVerifiedDate,
+      //Approvals
+      religiousLeaderApproved,
+      administratorApproved,
+      pollingStationApproval,
+      pollingStationRejectReasons,
+      cdfCommitteeApproval,
+      cdfCommitteeRejectReasons,
+      amountApproved
     };
 
     let stepLabel = this.getStepContent(step);
@@ -575,7 +929,14 @@ export class UserForm extends Component {
       <div>
         {/* <MuiThemeProvider> */}
         <div className="form-container">
-          <div className="form-steps-small"></div>
+          <div className="menu-bar">
+            <div className="logo-container"></div>
+            <div className="title-container">
+              <Typography component="h1" variant="h3">
+                Nyatike Bursary Application
+              </Typography>
+            </div>
+          </div>
           <div className="form-steps-large">
             <Stepper activeStep={step - 1}>
               {steps.map((label, index) => {

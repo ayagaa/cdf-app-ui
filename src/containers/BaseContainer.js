@@ -1,7 +1,10 @@
-import React from "react";
-import { Link, withRouter } from "react-router-dom";
-import { connect } from "react-redux";
+import React from 'react';
+import store from '../store/store';
+import App from '../App';
 
-class BaseContainer extends React.Component{
-    
+export default function BaseContainer() {
+    window.store = store();
+    return (
+        <App/>
+    );
 }
